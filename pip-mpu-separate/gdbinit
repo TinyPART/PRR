@@ -1,0 +1,3 @@
+symbol-file "/home/greg/Documents/xipfs-demos/pipcore-mpu/pip.elf"
+add-symbol-file "/home/greg/Documents/xipfs-demos/pip-mpu-separate/crt0/crt0.elf" -s .text 28896
+add-symbol-file "/home/greg/Documents/xipfs-demos/RIOT/examples/default/bin/dwm1001_pip/default.elf" -s .rom 31428 -s .got 536872192 -s .rom.ram 536875540 -s .ram 536878116
