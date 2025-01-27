@@ -1,0 +1,11 @@
+# Copyright (c) 2024 Université de Lille
+#
+# This file is subject to the terms and conditions of the GNU Lesser
+# General Public License v2.1. See the file LICENSE in the top level
+# directory for more details.
+#
+
+config MODULE_XIPFS
+    bool "xipfs support"
+    help
+      eXecute In-Place File System

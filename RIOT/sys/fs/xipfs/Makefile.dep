@@ -1,0 +1,3 @@
+ifneq (,$(filter xipfs,$(USEMODULE)))
+  USEMODULE += periph_flashpage
+endif
