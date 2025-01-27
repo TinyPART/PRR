@@ -1,0 +1,3 @@
+BOARD_INSUFFICIENT_MEMORY := \
+    atmega32u4 \
+    #

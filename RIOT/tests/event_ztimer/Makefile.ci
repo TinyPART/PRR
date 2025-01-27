@@ -1,0 +1,4 @@
+BOARD_INSUFFICIENT_MEMORY := \
+    atmega328p \
+    nucleo-l011k4 \
+    #
