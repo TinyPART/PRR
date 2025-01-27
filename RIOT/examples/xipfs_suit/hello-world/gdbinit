@@ -1,0 +1,13 @@
+set $flash_base = # Define the flash base address here
+set $ram_base = # Define the RAM base address here
+set $crt0_text = $flash_base
+set $text = $crt0_text + 688
+set $got = $text + 164
+set $data = $got + 24
+set $rel_got = $ram_base
+set $rel_data = $rel_got + 24
+set $bss = $rel_data + 0
+add-symbol-file /home/koen/dev/PRR/RIOT/examples/xipfs/hello-world/crt0/crt0.elf -s .text $crt0_text
+add-symbol-file /home/koen/dev/PRR/RIOT/examples/xipfs/hello-world/hello-world.elf -s .rom $text -s .got $rel_got -s .rom.ram $rel_data -s .ram $bss
+set $flash_end = $flash_base + 876
+set $ram_end = $ram_base + 28
