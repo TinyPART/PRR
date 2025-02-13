@@ -35,6 +35,19 @@ USEMODULE += xipfs
 # include and auto-initialize all available sensors
 USEMODULE += saul_default
 
+USEMODULE += auto_init_gnrc_netif
+# Specify the mandatory networking modules for IPv6 and UDP
+USEMODULE += gnrc_ipv6_default
+#USEMODULE += sock_udp
+# Additional networking modules that can be dropped if not needed
+#USEMODULE += gnrc_icmpv6_echo
+
+# Use the default file system
+USEMODULE += vfs_default
+USEMODULE += suit suit_transport_coap
+USEMODULE += suit_transport_vfs
+USEMODULE += suit_storage_vfs
+
 include $(RIOTBASE)/tests/Makefile.boards.netif
 ifneq (,$(filter $(BOARD),$(BOARD_PROVIDES_NETIF)))
   # Use modules for networking
