@@ -25,13 +25,37 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "periph/flashpage.h"
 #include "thread.h"
 #include "shell.h"
+#include "net/nanocoap_sock.h"
 
 #ifdef MODULE_NETIF
 #include "net/gnrc/pktdump.h"
 #include "net/gnrc.h"
 #endif
+
+#define COAP_INBUF_SIZE (256U)
+
+/* Extend stacksize of nanocoap server thread */
+static char _nanocoap_server_stack[THREAD_STACKSIZE_DEFAULT + THREAD_EXTRA_STACKSIZE_PRINTF];
+#define NANOCOAP_SERVER_QUEUE_SIZE     (8)
+static msg_t _nanocoap_server_msg_queue[NANOCOAP_SERVER_QUEUE_SIZE];
+
+static void *_nanocoap_server_thread(void *arg)
+{
+    (void)arg;
+
+    /* nanocoap_server uses gnrc sock which uses gnrc which needs a msg queue */
+    msg_init_queue(_nanocoap_server_msg_queue, NANOCOAP_SERVER_QUEUE_SIZE);
+
+    /* initialize nanocoap server instance */
+    uint8_t buf[COAP_INBUF_SIZE];
+    sock_udp_ep_t local = { .port=COAP_PORT, .family=AF_INET6 };
+    nanocoap_server(&local, buf, sizeof(buf));
+
+    return NULL;
+}
 
 int main(void)
 {
@@ -42,6 +66,12 @@ int main(void)
 #endif
 
     (void) puts("Welcome to RIOT!");
+
+        /* start nanocoap server thread */
+    thread_create(_nanocoap_server_stack, sizeof(_nanocoap_server_stack),
+                  THREAD_PRIORITY_MAIN - 1,
+                  THREAD_CREATE_STACKTEST,
+                  _nanocoap_server_thread, NULL, "nanocoap server");
 
     char line_buf[SHELL_DEFAULT_BUFSIZE];
     shell_run(NULL, line_buf, SHELL_DEFAULT_BUFSIZE);
